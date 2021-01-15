@@ -1,0 +1,48 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0
+}
+
+.grid {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid green;
+  width: 600px;
+  height: 600px;
+  flex-wrap: wrap;
+}
+
+.cell {
+  border: 1px solid black;
+  font-size: 25px;
+}
+
+.spaceship {
+  background-image: url('https://cdn0.iconfinder.com/data/icons/video-games-ultra-color/60/050_-_Space_Invaders-512.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.laser {
+  background-image: url('https://i.imgur.com/h2iXo6S.png');
+  background-size: contain;
+  
+}
+
+.alien {
+  background-image: url('https://cdn4.iconfinder.com/data/icons/space-invaders/100/10-512.png');
+  background-size: contain;
+}
+
+.explosion {
+  background-image: url('https://i.pinimg.com/originals/a4/54/05/a454052e62b00974cfffcc4848ff9e3b.png');
+  background-size: cover;
+}
