@@ -46,3 +46,34 @@ body {
   background-image: url('https://i.pinimg.com/originals/a4/54/05/a454052e62b00974cfffcc4848ff9e3b.png');
   background-size: cover;
 }
+
+.dangerZone {
+  display: flex;
+  background-color: rgba(202, 4, 4, 0.534);
+  background-size: cover;
+  justify-content: center;
+  align-items: center;
+}
+
+.bomb {
+  background-image: url('https://cdn.pixabay.com/photo/2017/01/31/16/59/bomb-2025548_1280.png');
+  background-size: contain;
+}
+
+.points {
+  padding: 15px;
+  text-align: center;
+  margin: 20px; 
+  height: 50px;
+  width: 175px;
+  border: 2px solid black;
+}
+
+button {
+  background-color: blue;
+  padding: 10px;
+  height: 40px;
+  width: 120px;
+  text-align: center;
+  margin: 20px;
+}
