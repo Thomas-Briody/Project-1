@@ -1,30 +1,45 @@
 const grid = document.querySelector('.grid')
-const startButton = document.querySelector('button')
-const width = 10
+const startButton = document.querySelector('.button-start')
+const resetButton = document.querySelector('.button-reset')
+const titleCard = document.querySelector('.title-card')
+const width = 15
 const cells = []
-let spaceship = 93
+let spaceship = 217
 const laserTimers = {}
+let laserTimer
+let bombTimer
+let reset = false
 const bombTimers = {}
-let bombPosition 
-const aliensStart = [2, 4, 6, 7, 13, 15, 16]
-let currentAlienPositions = [2, 4, 6, 7, 13, 15, 16]
-let aliensMovingInterval 
+const aliensStart = [2, 4, 6, 7, 13, 15, 16, 18, 21, 24, 27]
+let currentAlienPositions = [2, 4, 6, 7, 13, 15, 16, 18, 21, 24, 27]
+const hearts = document.querySelectorAll('.heart')
+let aliensMovingInterval
+let bombDropInterval
 const pointsTotal = document.querySelector('.points-total')
 const dangerZone = [
-  { letter: 'd', index: 80 },
-  { letter: 'a', index: 81 },
-  { letter: 'n', index: 82 },
-  { letter: 'g', index: 83 },
-  { letter: 'e', index: 84 },
-  { letter: 'r', index: 85 },
-  { letter: 'z', index: 86 },
-  { letter: 'o', index: 87 },
-  { letter: 'n', index: 88 },
-  { letter: 'e', index: 89 }
+  { letter: '-', index: 195 },
+  { letter: '-', index: 196 },
+  { letter: 'd', index: 197 },
+  { letter: 'a', index: 198 },
+  { letter: 'n', index: 199 },
+  { letter: 'g', index: 200 },
+  { letter: 'e', index: 201 },
+  { letter: 'r', index: 202 },
+  { letter: '-', index: 203 },
+  { letter: 'z', index: 204 },
+  { letter: 'o', index: 205 },
+  { letter: 'n', index: 206 },
+  { letter: 'e', index: 207 },
+  { letter: '-', index: 208 },
+  { letter: '-', index: 209 }
 ]
 let points = 0
+let lives = 3
+const currentLives = document.querySelector('.current-lives')
 
 function startGame() {
+  reset = false
+  titleCard.classList.add('hidden')
   //* Call the function to create the grid:
   createGrid()
   //* Call the function to add the spaceship
@@ -34,30 +49,17 @@ function startGame() {
   //* Call the function to add aliens to the grid:
   addAliens()
   //* Call the function to generate a bomb
-  setInterval(() => bombAppear(), 2000)
+  bombDropInterval = setInterval(() => bombAppear(), 2000)
 }
 
-startButton.addEventListener('click',() => {
+startButton.addEventListener('click', () => {
   startGame()
   startButton.disabled = true
 })
+resetButton.addEventListener('click', () => {
+  resetGame()
+})
 
-//* Creating the grid: 
-
-function createGrid() {
-  for (let index = 0; index < width ** 2; index++) {
-  // ? Generate each element
-    const cell = document.createElement('div')
-    cell.classList.add('cell')
-    grid.appendChild(cell)
-    cells.push(cell)
-    // ? Number each cell by its index.
-    cell.innerHTML = index
-    // ? Set the width and height of my cells
-    cell.style.width = `${100 / width}%`
-    cell.style.height = `${100 / width}%`
-  }
-}
 
 //* Getting the aliens to move. This function starts the aliens moving
 
@@ -65,15 +67,16 @@ function createGrid() {
 document.addEventListener('keyup', (event) => {
   const key = event.key
   if (key === 'ArrowRight' && !(spaceship % width === width - 1)) {
-    moveSpaceshipRight() 
+    moveSpaceshipRight()
   } else if (key === 'ArrowLeft' && !(spaceship % width === 0)) {
     moveSpaceshipLeft()
-  } 
+  }
 })
 
 //* Event listener to listen for space bar, and trigger the laser functions
-document.body.onkeyup = function(e){
-  if (e.keyCode === 32){
+document.body.onkeyup = function (e) {
+  if (e.keyCode === 32) {
+    e.preventDefault()
     shootLaser()
   }
 }
@@ -85,26 +88,24 @@ document.body.onkeyup = function(e){
 function addSpaceship() {
   cells[spaceship].classList.remove('spaceship')
   cells[spaceship].classList.add('spaceship')
-} 
-
+}
 function moveSpaceshipLeft() {
   cells[spaceship].classList.remove('spaceship')
   spaceship -= 1
   cells[spaceship].classList.add('spaceship')
 }
-
 function moveSpaceshipRight() {
   cells[spaceship].classList.remove('spaceship')
   spaceship += 1
   cells[spaceship].classList.add('spaceship')
 }
- 
+
 //* -- Laser Functions --
 
 function shootLaser() {
   const laserStartPosition = spaceship - width
   const laserId = Math.random() * Math.random() * 100
-  laserTimers[laserId] = { timerId: laserId , position: laserStartPosition }
+  laserTimers[laserId] = { timerId: laserId, position: laserStartPosition }
   const laserCurrentPosition = laserTimers[laserId].position
   const laserTimer = laserTimers[laserId].timerId
   cells[laserCurrentPosition].classList.add('laser')
@@ -112,13 +113,13 @@ function shootLaser() {
 }
 
 function laserFly(laserTimer, laser) {
-  laserTimer = setInterval( () => {
-    if (cells[laser].classList.contains('alien') ) {
+  laserTimer = setInterval(() => {
+    if (cells[laser].classList.contains('alien')) {
       cells[laser].classList.add('explosion')
       points += 100
       pointsTotal.innerHTML = points
-      currentAlienPositions =  currentAlienPositions.filter((alien) => {
-        return !cells[alien].classList.contains('laser') 
+      currentAlienPositions = currentAlienPositions.filter((alien) => {
+        return !cells[alien].classList.contains('laser')
       })
       cells[laser].classList.remove('laser')
       cells[laser].classList.remove('alien')
@@ -141,11 +142,11 @@ function laserFly(laserTimer, laser) {
 //* -- Alien Functions --
 
 //* This adds aliens to the cells for the start of the game
-function addAliens () { 
+function addAliens() {
   aliensStart.forEach(alien => {
     cells[alien].classList.add('alien')
   })
-  aliensMovingRightInterval() 
+  aliensMovingRightInterval()
 }
 
 //* This function moves the aliens right 1 cell. It does this by removing the alien from its current position, redefines the position, and then adds the alien to the new position.
@@ -157,7 +158,7 @@ function moveAliensRight() {
   })
   //* Redefine Positions
   currentAlienPositions = currentAlienPositions.map((alien) => {
-    return alien += 1 
+    return alien += 1
   })
   //* Add aliens to new positions
   currentAlienPositions.forEach((alien) => {
@@ -171,7 +172,7 @@ function moveAliensLeft() {
     cells[alien].classList.remove('alien')
   })
   currentAlienPositions = currentAlienPositions.map((alien) => {
-    return alien -= 1 
+    return alien -= 1
   })
   currentAlienPositions.forEach((alien) => {
     cells[alien].classList.add('alien')
@@ -184,7 +185,7 @@ function moveAliensDown() {
     cells[alien].classList.remove('alien')
   })
   currentAlienPositions = currentAlienPositions.map((alien) => {
-    return alien += width 
+    return alien += width
   })
   currentAlienPositions.forEach((alien) => {
     cells[alien].classList.add('alien')
@@ -192,7 +193,7 @@ function moveAliensDown() {
 }
 //* This interval ensures that the functions for moving the alien right occurs every 1 second. It detects if any of the aliens hit the right boundary, in which case it tells the aliens to move down 1 cell (by calling the moveAliensDown function), and calls the moveAliensLeft function 
 function aliensMovingRightInterval() {
-  aliensMovingInterval = setInterval( () => {
+  aliensMovingInterval = setInterval(() => {
     const alienOnRightEdge = currentAlienPositions.some(position => position % width === width - 1)
     if (aliensReachGround()) {
       console.log('GAME OVER BOOIIII')
@@ -202,14 +203,14 @@ function aliensMovingRightInterval() {
     } else if (alienOnRightEdge) {
       moveAliensDown()
       clearInterval(aliensMovingInterval)
-      aliensMovingLeftInterval() 
+      aliensMovingLeftInterval()
     }
-  }, 1000)
+  }, 800)
 }
 //* This interval ensures that the functions for moving the alien left occurs every 1 second. It detects if any of the aliens hit the left boundary, in which case it tells the aliens to move down 1 cell (by calling the moveAliensDown function), and calls the moveAliensRight function 
 
 function aliensMovingLeftInterval() {
-  aliensMovingInterval = setInterval( () => {
+  aliensMovingInterval = setInterval(() => {
     const alienOnLeftEdge = currentAlienPositions.some(position => position % width === 0)
     if (aliensReachGround()) {
       clearInterval(aliensMovingInterval)
@@ -222,11 +223,11 @@ function aliensMovingLeftInterval() {
       clearInterval(aliensMovingInterval)
       aliensMovingRightInterval()
     }
-  }, 1000)
+  }, 800)
 }
 
 function aliensReachGround() {
-  const atTheGround = currentAlienPositions.some(position => position === 79)
+  const atTheGround = currentAlienPositions.some(position => position === 194)
   return atTheGround
 }
 
@@ -240,7 +241,7 @@ function bombAppear() {
     return bombAppear()
   }
   const bombId = Math.random() * Math.random() * 100
-  bombTimers[bombId] = { timerId: bombId , position: bombStartPosition }
+  bombTimers[bombId] = { timerId: bombId, position: bombStartPosition }
   const bombCurrentPosition = bombTimers[bombId].position
   const bombTimer = bombTimers[bombId].timerId
   cells[bombStartPosition].classList.add('bomb')
@@ -249,36 +250,105 @@ function bombAppear() {
 
 function bombDrop(bombTimer, bombPosition) {
   bombTimer = setInterval(() => {
-    if (cells[bombPosition].classList.contains('spaceship')) {
-      cells[bombPosition].classList.add('explosion')
-      cells[bombPosition].classList.remove('spaceship', 'bomb')
-      setTimeout(() => {
-        cells[bombPosition].classList.remove('explosion')
-      }, 200)
+    collisionCheck(bombTimer)
+    if (reset === true) {
       clearInterval(bombTimer)
-      //* Issue with below, doesnt always register:
-    } else if (cells[bombPosition].classList.contains('laser')) {
-      console.log('LASER HITS BOMB')
-      cells[bombPosition].classList.remove('laser')
-      cells[bombPosition].classList.remove('bomb')
-      cells[bombPosition].classList.add('explosion')
-    } else if (!(bombPosition + width >= width ** 2)) {
-      cells[bombPosition].classList.remove('bomb')
-      bombPosition = bombPosition += width
-      cells[bombPosition].classList.add('bomb')
     } else {
-      cells[bombPosition].classList.remove('bomb')
-      clearInterval(bombTimer)
+      if (cells[bombPosition].classList.contains('spaceship')) {
+        cells[bombPosition].classList.add('explosion')
+        cells[bombPosition].classList.remove('spaceship', 'bomb')
+        setTimeout(() => {
+          cells[bombPosition].classList.remove('explosion')
+        }, 200)
+        clearInterval(bombTimer)
+        loseLife()
+        lives--
+      } else if (!(bombPosition + width >= width ** 2)) {
+        cells[bombPosition].classList.remove('bomb')
+        bombPosition = bombPosition += width
+        cells[bombPosition].classList.add('bomb')
+      } else {
+        cells[bombPosition].classList.remove('bomb')
+        clearInterval(bombTimer)
+      }
     }
-  }, 500)
+  }, 200)
 }
-
 
 //* -- Other Functions --
 
-function loadDangerZone() { 
+function loadDangerZone() {
   dangerZone.forEach(item => {
     cells[item.index].innerText = item.letter.toUpperCase()
     cells[item.index].classList.add(item.letter, 'dangerZone')
   })
 }
+
+//* Creating the grid: 
+
+function createGrid() {
+  for (let index = 0; index < width ** 2; index++) {
+    // ? Generate each element
+    const cell = document.createElement('div')
+    cell.classList.add('cell')
+    grid.appendChild(cell)
+    cells.push(cell)
+    // ? Number each cell by its index.
+    cell.innerHTML = index
+    // ? Set the width and height of my cells
+    cell.style.width = `${100 / width}%`
+    cell.style.height = `${100 / width}%`
+  }
+}
+function resetGame() {
+  reset = true
+  clearInterval(aliensMovingInterval)
+  currentAlienPositions.forEach((alien) => {
+    cells[alien].classList.remove('alien')
+  })
+  const bombArray = Object.values(bombTimers)
+  clearInterval(bombDropInterval)
+  bombArray.forEach((bomb) => {
+    clearInterval(bomb.timerId)
+  })
+  const aliensStart = [2, 4, 6, 7, 13, 15, 16, 18, 21, 24, 27]
+  currentAlienPositions = aliensStart
+  cells.forEach((cell) => {
+    cell.classList.remove('bomb')
+  })
+  startButton.disabled = false
+  // startGame()
+}
+
+function collisionCheck(bombTimer) {
+  setInterval(() => {
+    cells.forEach((cell) => {
+      if (cell.classList.contains('laser') && cell.classList.contains('bomb')) {
+        clearInterval(bombTimer)
+        cell.classList.remove('laser')
+        cell.classList.remove('bomb')
+        cell.classList.add('explosion')
+        setTimeout(() => {
+          cell.classList.remove('explosion')
+        }, 100)
+      }
+    })
+  }, 10)
+}
+collisionCheck()
+
+
+function loseLife() {
+  hearts[lives - 1].classList.add('broken')
+  console.log('LOSE A LIFE')
+}
+
+
+//* BUGS:
+  //* when you click start game, the button is selected so space bar presses the button
+  //* lasers are not interacting with bombs when they hit eachother
+  //* title card isnt working
+  //* resett
+
+
+//* for a start title card, z index css and display none 

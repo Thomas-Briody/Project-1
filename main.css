@@ -4,25 +4,31 @@
 
 body {
   height: 100vh;
+  background-color: black;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  margin: 0
+  flex-direction: row;
+  margin: 0;
+  /* background-color: black; */
+  background-size: cover;
 }
 
 .grid {
   display: flex;
-  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   border: 1px solid green;
-  width: 600px;
-  height: 600px;
+  width: 700px;
+  height: 700px;
   flex-wrap: wrap;
+  background-image: url('https://www.sciencenewsforstudents.org/wp-content/uploads/2020/05/1030_alien_atmoshpere_hydrogen-1028x579.jpg');
+  background-size: cover;
 }
 
 .cell {
-  border: 1px solid black;
   font-size: 25px;
+  border: 1px solid green;
 }
 
 .spaceship {
@@ -32,8 +38,10 @@ body {
 }
 
 .laser {
-  background-image: url('https://i.imgur.com/h2iXo6S.png');
-  background-size: contain;
+  background-image: url('https://studio.code.org/v3/assets/vzVUbRbZPL277w_d2A5PQNcAYEoRCmSljc_invQSRhE/Red_laser.png');
+  transform: rotate(90deg);
+  background-size: cover;
+  background-repeat: no-repeat;
   
 }
 
@@ -61,19 +69,91 @@ body {
 }
 
 .points {
+  display: flex;
   padding: 15px;
   text-align: center;
   margin: 20px; 
   height: 50px;
   width: 175px;
   border: 2px solid black;
+  background-color: red;
 }
 
-button {
-  background-color: blue;
+.lives {
+  display: flex;
+  padding: 15px;
+  text-align: center;
+  margin: 20px; 
+  height: 50px;
+  width: 175px;
+  border: 2px solid black;
+  background-color: red;
+}
+
+.button-start {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+  width: 140px;
+  text-align: center;
+  margin-top: 100px;
+  background-color: black;
+  font-family: Helvetica;
+  color: white;
+}
+
+.button-reset {
+  display: flex;
+  background-color: green;
   padding: 10px;
   height: 40px;
   width: 120px;
   text-align: center;
   margin: 20px;
+
 }
+
+.points-and-lives {
+  display: flex;
+  flex-direction: column;
+}
+
+.title-card {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  height: 900px;
+  width: 1100px;
+  background-image: url('https://i.pinimg.com/originals/6b/bc/d9/6bbcd95e1f751a22c7bfa6928823e4ee.jpg');
+  background-size: cover;
+  z-index: 1;
+} 
+
+.title-card.hidden {
+  display: none;
+}
+.instructions {
+  color: white;
+  text-align: center;
+}
+
+.heart {
+  display: flex;
+  margin-left: 20px;
+  background-image: url('https://www.pngjoy.com/pngl/272/5209352_pixel-hearts-broken-heart-pixel-png-png-download.png');
+  background-size: cover;
+  height: 50px;
+  width: 55px;
+}
+.heart.broken {
+  display: flex;
+  background-image: url('https://www.nicepng.com/png/full/294-2948619_red-pixelated-broken-heart-redheart-brokenheart-freetoe-pixel.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 50px;
+  width: 55px;
+}
+
+

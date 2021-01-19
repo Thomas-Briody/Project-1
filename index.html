@@ -1,17 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="main.css">
 </head>
+
 <body>
-  <button>Start Game</button>
+  <div class="title-card">
+    <button class="button-start">Start Game</button>
+    <br>
+    <p class='instructions'> Instructions: <br><br>
+      Use arrows to move and space to shoot laser</p>
+  </div>
+
+  <button class="button-reset">Reset Game</button>
   <div class="grid"></div>
 
-<div class="points">You have: <span class="points-total">0</span> points</div>
+  <div class="points-and-lives">
+    <p class="points">You have: <span class="points-total">0</span> points</p>
 
-<script src="app.js"></script>
+    <div class="lives-container">
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
+
 </html>
