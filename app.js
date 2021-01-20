@@ -10,7 +10,9 @@ const width = 15
 const cells = []
 let spaceship = 217
 const laserTimers = {}
+let laserTimer
 let reset = false
+let gameOverCheck = false
 const bombTimers = {}
 let aliensStart = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]
 let currentAlienPositions = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]
@@ -41,7 +43,6 @@ let alienSpeed = 800
 let bombFrequencySpeed = 2000
 
 function startGame() {
-  addLaserEventListener()
   lives = 3
   pointsTotal.innerHTML = '0'
   reset = false
@@ -58,9 +59,7 @@ function startGame() {
   bombDropInterval = setInterval(() => bombAppear(), bombFrequencySpeed)
 }
 
-
 function startLevelTwo() {
-  addLaserEventListener()
   lives = 3
   pointsTotal.innerHTML = '0'
   reset = false
@@ -68,7 +67,7 @@ function startLevelTwo() {
   aliensStart = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57]
   currentAlienPositions = aliensStart
   alienSpeed = 500
-  bombFrequencySpeed = 1300
+  bombFrequencySpeed = 1000
   createGrid()
   addSpaceship()
   loadDangerZone()
@@ -82,6 +81,11 @@ startButton.addEventListener('click', () => {
 })
 
 playAgain.addEventListener('click', () => {
+  levelTwo.classList.remove('hidden')
+  cells.forEach((cell) => {
+    cell.classList.remove('laser')
+  })
+  gameOverCheck = false
   gameOverCard.classList.add('hidden')
   hearts.forEach((heart) => {
     heart.classList.remove('broken')
@@ -92,6 +96,10 @@ playAgain.addEventListener('click', () => {
 })
 
 levelTwo.addEventListener('click', () => {
+  gameOverCheck = false
+  cells.forEach((cell) => {
+    cell.classList.remove('laser')
+  })
   gameOverCard.classList.add('hidden')
   hearts.forEach((heart) => {
     heart.classList.remove('broken')
@@ -114,14 +122,17 @@ document.addEventListener('keyup', (event) => {
 })
 
 //* Event listener to listen for space bar, and trigger the laser functions
-function addLaserEventListener() {
-  document.addEventListener('keydown', (event)  => {
-    if (event.keyCode === 32) {
+document.addEventListener('keydown', (event) => {
+  if (event.keyCode === 32) {
+    if (gameOverCheck === false) {
       event.preventDefault()
       shootLaser()
+    } else {
+      event.preventDefault()
     }
-  })
-}
+
+  }
+})
 
 //! ---------- FUNCTIONS ----------
 
@@ -149,7 +160,7 @@ function shootLaser() {
   const laserId = Math.random() * Math.random() * 100
   laserTimers[laserId] = { timerId: laserId, position: laserStartPosition }
   const laserCurrentPosition = laserTimers[laserId].position
-  const laserTimer = laserTimers[laserId].timerId
+  // const laserTimer = laserTimers[laserId].timerId
   cells[laserCurrentPosition].classList.add('laser')
   laserFly(laserTimer, laserCurrentPosition)
 }
@@ -163,7 +174,16 @@ function laserFly(laserTimer, laser) {
     //     cell.classList.remove('laser')
     //   }) 
     // } 
-    if (cells[laser].classList.contains('alien')) {
+    if (lives === 0 || aliensReachGround() || currentAlienPositions.length === 0) {
+      clearInterval(laserTimer)
+      cells[laser].classList.remove('laser')
+      cells.forEach((cell) => {
+        cell.classList.remove('laser')
+      })
+
+    } else if (cells[laser].classList.contains('alien')) {
+      clearInterval(laserTimer)
+      console.log('LASER>', laser)
       cells[laser].classList.add('explosion')
       points += 100
       pointsTotal.innerHTML = points
@@ -175,10 +195,7 @@ function laserFly(laserTimer, laser) {
       setTimeout(() => {
         cells[laser].classList.remove('explosion')
       }, 200)
-      clearInterval(laserTimer)
-      console.log('BOOM')
     } else if (!(laser < width)) {
-      console.log('Test')
       cells[laser].classList.remove('laser')
       laser -= width
       cells[laser].classList.add('laser')
@@ -360,7 +377,7 @@ function createGrid() {
   }
 }
 function gameOver(winMessage) {
-  console.log(levelTwo.classList)
+  gameOverCheck = true
   if (winMessage === 'Game Over!') {
     levelTwo.classList.add('hidden')
   }
@@ -384,7 +401,6 @@ function gameOver(winMessage) {
     cell.classList.remove('bomb', 'explosion', 'alien', 'laser')
   })
   startButton.disabled = false
-  // startGame()
 }
 
 function collisionCheck(bombTimer) {
