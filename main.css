@@ -4,7 +4,7 @@
 
 body {
   height: 100vh;
-  background-color: black;
+  background-image: url('https://i.imgur.com/JMo0aDH.jpg');
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,18 +12,20 @@ body {
   margin: 0;
   /* background-color: black; */
   background-size: cover;
+  font-family: 'Goldman', cursive;
 }
 
 .grid {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* border: 1px solid green; */
+  border: 3px solid white;
   width: 700px;
   height: 700px;
   flex-wrap: wrap;
   background-image: url('https://www.sciencenewsforstudents.org/wp-content/uploads/2020/05/1030_alien_atmoshpere_hydrogen-1028x579.jpg');
   background-size: cover;
+  border-radius:5%;
 }
 
 .cell {
@@ -43,7 +45,7 @@ body {
   width: 46px;
   background-size: contain;
   background-repeat: no-repeat;
-  
+  background-position: center;
 }
 
 .alien {
@@ -65,19 +67,27 @@ body {
 }
 
 .bomb {
-  background-image: url('https://cdn.pixabay.com/photo/2017/01/31/16/59/bomb-2025548_1280.png');
+  background-image: url('https://i.imgur.com/96vJYWv.png');
   background-size: contain;
+  transform: rotate(180deg);
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .points {
+  font-family: 'Goldman', cursive;
+  color: yellow;
+  font-size: 20px;
+  text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
   display: flex;
-  padding: 15px;
+  padding: 10px;
   text-align: center;
   margin: 20px; 
   height: 50px;
-  width: 100px;
-  border: 2px solid black;
+  width: 170px;
+  border: 3px solid white;
   background-color: red;
+  border-radius: 5%;
 }
 
 .lives {
@@ -95,13 +105,17 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80px;
+  height: 70px;
   width: 140px;
   text-align: center;
-  margin-top: 100px;
-  background-color: black;
-  font-family: Helvetica;
-  color: white;
+  margin-top: 65px;
+  background-color: red;
+  font-family: 'Goldman', cursive;
+  color: yellow;
+  font-size: 20px;
+  text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
+  border: none;
+  border-radius: 5%;
 }
 
 
@@ -115,17 +129,19 @@ body {
   align-items: center;
   flex-direction: column;
   position: absolute;
-  height: 900px;
-  width: 1100px;
+  height: 750px;
+  width:950px;
   background-image: url('https://i.pinimg.com/originals/6b/bc/d9/6bbcd95e1f751a22c7bfa6928823e4ee.jpg');
   background-size: cover;
   z-index: 1;
+  border-radius: 5%;
 } 
 
 .title-card.hidden {
   display: none;
 }
 .instructions {
+  font-family: 'Goldman', cursive;
   color: white;
   text-align: center;
 }
@@ -149,17 +165,19 @@ body {
 
 .game-over {
   display: flex;
-  font-size: 70px;
-  font-family: Helvetica;
-  display: flex;
+  font-size: 60px;
+  font-family: 'Goldman', cursive;
+  justify-content: space-between;
   align-items: center;
   flex-direction: column;
   position: absolute;
   height: 700px;
-  width: 850px;
+  width: 950px;
   background-image: url('https://31.media.tumblr.com/tumblr_m9w94lgKjF1r8rjf0o1_500.gif');
-  background-size: contain;
+  background-size: cover;
+  background-repeat: no-repeat;
   z-index: 1;
+  border-radius:5%;
 } 
 
 .game-over.hidden {
@@ -167,6 +185,9 @@ body {
 }
 
 .play-again {
+  padding: 0 10px 0 10px;
+  border: 3px solid white;
+  border-radius: 5%;
   display: flex;
   font-size: 20px;
   justify-content: center;
@@ -174,15 +195,44 @@ body {
   height: 80px;
   width: 240px;
   text-align: center;
-  margin-top: 155px;
   background-color: black;
-  font-family: Helvetica;
+  font-family: 'Goldman', cursive;
   color: white;
-
 }
-p {
+
+.level-2 {
+  padding: 0 10px 0 10px;
+  border: 3px solid white;
+  border-radius: 5%;
   display: flex;
-  margin: 10px;
-  justify-content: flex-end;
-  align-items: flex-end;
+  font-size: 20px;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+  width: 240px;
+  text-align: center;
+  background-color: black;
+  font-family: 'Goldman', cursive;
+  color: white;
+}
+
+.level-2.hidden {
+  display: none;
+}
+
+.you-scored {
+  padding: 0px;
+}
+
+.end-message {
+  padding: 0px;
+}
+
+.game-over-points {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.points-total {
+  margin-left: 10px;
+  margin-right: 10px;
 }

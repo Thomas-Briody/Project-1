@@ -4,14 +4,16 @@ const titleCard = document.querySelector('.title-card')
 const gameOverCard = document.querySelector('.game-over')
 const playAgain = document.querySelector('.play-again')
 const gameOverPoints = document.querySelector('.game-over-points')
+const endMessage = document.querySelector('.end-message')
+const levelTwo = document.querySelector('.level-2')
 const width = 15
 const cells = []
 let spaceship = 217
 const laserTimers = {}
 let reset = false
 const bombTimers = {}
-const aliensStart = [2, 4, 6, 7, 13, 15, 16, 18, 21, 24, 27]
-let currentAlienPositions = [2, 4, 6, 7, 13, 15, 16, 18, 21, 24, 27]
+let aliensStart = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]
+let currentAlienPositions = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]
 const hearts = document.querySelectorAll('.heart')
 let aliensMovingInterval
 let bombDropInterval
@@ -35,10 +37,15 @@ const dangerZone = [
 ]
 let points = 0
 let lives = 3
+let alienSpeed = 800
+let bombFrequencySpeed = 2000
 
 function startGame() {
+  addLaserEventListener()
+  lives = 3
+  pointsTotal.innerHTML = '0'
   reset = false
-  titleCard.classList.add('hidden')
+  titleCard.classList.add('animate__fadeOut')
   //* Call the function to create the grid:
   createGrid()
   //* Call the function to add the spaceship
@@ -48,7 +55,25 @@ function startGame() {
   //* Call the function to add aliens to the grid:
   addAliens()
   //* Call the function to generate a bomb
-  bombDropInterval = setInterval(() => bombAppear(), 2000)
+  bombDropInterval = setInterval(() => bombAppear(), bombFrequencySpeed)
+}
+
+
+function startLevelTwo() {
+  addLaserEventListener()
+  lives = 3
+  pointsTotal.innerHTML = '0'
+  reset = false
+  titleCard.classList.add('hidden')
+  aliensStart = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57]
+  currentAlienPositions = aliensStart
+  alienSpeed = 500
+  bombFrequencySpeed = 1300
+  createGrid()
+  addSpaceship()
+  loadDangerZone()
+  addAliens()
+  bombDropInterval = setInterval(() => bombAppear(), bombFrequencySpeed)
 }
 
 startButton.addEventListener('click', () => {
@@ -66,6 +91,16 @@ playAgain.addEventListener('click', () => {
   startGame()
 })
 
+levelTwo.addEventListener('click', () => {
+  gameOverCard.classList.add('hidden')
+  hearts.forEach((heart) => {
+    heart.classList.remove('broken')
+  })
+  startButton.disabled = true
+  points = 0
+  startLevelTwo()
+})
+
 //* Getting the aliens to move. This function starts the aliens moving
 
 //* Event listener to listen for left and right keys
@@ -79,11 +114,13 @@ document.addEventListener('keyup', (event) => {
 })
 
 //* Event listener to listen for space bar, and trigger the laser functions
-document.body.onkeyup = function (e) {
-  if (e.keyCode === 32) {
-    e.preventDefault()
-    shootLaser()
-  }
+function addLaserEventListener() {
+  document.addEventListener('keydown', (event)  => {
+    if (event.keyCode === 32) {
+      event.preventDefault()
+      shootLaser()
+    }
+  })
 }
 
 //! ---------- FUNCTIONS ----------
@@ -119,6 +156,13 @@ function shootLaser() {
 
 function laserFly(laserTimer, laser) {
   laserTimer = setInterval(() => {
+    // if (lives === 0 || aliensReachGround() || currentAlienPositions.length === 0) {
+    //   console.log('CLEAR LASERS')
+    //   clearInterval(laserTimer)
+    //   return cells.forEach((cell) => {
+    //     cell.classList.remove('laser')
+    //   }) 
+    // } 
     if (cells[laser].classList.contains('alien')) {
       cells[laser].classList.add('explosion')
       points += 100
@@ -199,10 +243,13 @@ function moveAliensDown() {
 //* This interval ensures that the functions for moving the alien right occurs every 1 second. It detects if any of the aliens hit the right boundary, in which case it tells the aliens to move down 1 cell (by calling the moveAliensDown function), and calls the moveAliensLeft function 
 function aliensMovingRightInterval() {
   aliensMovingInterval = setInterval(() => {
+    if (currentAlienPositions.length === 0) {
+      return gameOver('You Won!')
+    }
     const alienOnRightEdge = currentAlienPositions.some(position => position % width === width - 1)
     if (aliensReachGround()) {
       clearInterval(aliensMovingInterval)
-      return gameOver()
+      return gameOver('Game Over!')
     } else if (!alienOnRightEdge) {
       moveAliensRight()
     } else if (alienOnRightEdge) {
@@ -210,16 +257,20 @@ function aliensMovingRightInterval() {
       clearInterval(aliensMovingInterval)
       aliensMovingLeftInterval()
     }
-  }, 800)
+  }, alienSpeed)
 }
 //* This interval ensures that the functions for moving the alien left occurs every 1 second. It detects if any of the aliens hit the left boundary, in which case it tells the aliens to move down 1 cell (by calling the moveAliensDown function), and calls the moveAliensRight function 
 
 function aliensMovingLeftInterval() {
   aliensMovingInterval = setInterval(() => {
+    if (currentAlienPositions.length === 0) {
+      return gameOver('You Won!')
+
+    }
     const alienOnLeftEdge = currentAlienPositions.some(position => position % width === 0)
     if (aliensReachGround()) {
       clearInterval(aliensMovingInterval)
-      return gameOver()
+      return gameOver('Game Over!')
     } else if (!alienOnLeftEdge) {
       moveAliensLeft()
     } else if (alienOnLeftEdge) {
@@ -227,7 +278,7 @@ function aliensMovingLeftInterval() {
       clearInterval(aliensMovingInterval)
       aliensMovingRightInterval()
     }
-  }, 800)
+  }, alienSpeed)
 }
 
 function aliensReachGround() {
@@ -254,7 +305,7 @@ function bombAppear() {
 
 function bombDrop(bombTimer, bombPosition) {
   if (lives === 0) {
-    return gameOver()
+    return gameOver('Game Over!')
   }
   bombTimer = setInterval(() => {
     collisionCheck(bombTimer)
@@ -280,7 +331,7 @@ function bombDrop(bombTimer, bombPosition) {
         clearInterval(bombTimer)
       }
     }
-  }, 200)
+  }, 150)
 }
 
 //* -- Other Functions --
@@ -308,24 +359,29 @@ function createGrid() {
     cell.style.height = `${100 / width}%`
   }
 }
-function gameOver() {
+function gameOver(winMessage) {
+  console.log(levelTwo.classList)
+  if (winMessage === 'Game Over!') {
+    levelTwo.classList.add('hidden')
+  }
+  gameOverCard.classList.add('animate__fadeIn')
   gameOverCard.classList.remove('hidden')
   reset = true
-  lives = 3
+  endMessage.innerHTML = `${winMessage}`
   gameOverPoints.innerHTML = points
   clearInterval(aliensMovingInterval)
-  currentAlienPositions.forEach((alien) => {
-    cells[alien].classList.remove('alien')
-  })
   const bombArray = Object.values(bombTimers)
   clearInterval(bombDropInterval)
   bombArray.forEach((bomb) => {
     clearInterval(bomb.timerId)
   })
-  const aliensStart = [2, 4, 6, 7, 13, 15, 16, 18, 21, 24, 27]
+  const laserArray = Object.values(laserTimers)
+  laserArray.forEach((laser) => {
+    clearInterval(laser.timerId)
+  })
   currentAlienPositions = aliensStart
   cells.forEach((cell) => {
-    cell.classList.remove('bomb')
+    cell.classList.remove('bomb', 'explosion', 'alien', 'laser')
   })
   startButton.disabled = false
   // startGame()
@@ -351,16 +407,12 @@ collisionCheck()
 
 function loseLife() {
   if (lives === 0) {
-    return gameOver()
+    return gameOver('Game Over!')
+
   }
   hearts[lives - 1].classList.add('broken')
 }
 
-//* BUGS:
-  //* when you click start game, the button is selected so space bar presses the button
-  //* lasers are not interacting with bombs when they hit eachother
-  //* title card isnt working
-  //* resett
-
-
-//* for a start title card, z index css and display none 
+//* centering rocket in cells
+//* spacing in between words in game over screen
+//* 
