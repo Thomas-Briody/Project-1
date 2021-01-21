@@ -23,7 +23,7 @@ body {
   width: 700px;
   height: 700px;
   flex-wrap: wrap;
-  background-image: url('https://www.sciencenewsforstudents.org/wp-content/uploads/2020/05/1030_alien_atmoshpere_hydrogen-1028x579.jpg');
+  background-image: url('https://i.imgur.com/uFyXtGZ.jpg');
   background-size: cover;
   border-radius:5%;
 }
@@ -34,7 +34,7 @@ body {
 }
 
 .spaceship {
-  background-image: url('https://cdn0.iconfinder.com/data/icons/video-games-ultra-color/60/050_-_Space_Invaders-512.png');
+  background-image: url('./assets/Spaceship.webp');
   background-size: contain;
   background-repeat: no-repeat;
 }
@@ -49,12 +49,13 @@ body {
 }
 
 .alien {
-  background-image: url('https://cdn4.iconfinder.com/data/icons/space-invaders/100/10-512.png');
+  background-image: url('./assets/Alien-Moving.gif');
   background-size: contain;
+  transform: scaleX(0.9)
 }
 
 .explosion {
-  background-image: url('https://i.pinimg.com/originals/a4/54/05/a454052e62b00974cfffcc4848ff9e3b.png');
+  background-image: url('./assets/explosion.png');
   background-size: cover;
 }
 
@@ -90,6 +91,26 @@ body {
   border-radius: 5%;
 }
 
+.level-2-tag {
+  font-family: 'Goldman', cursive;
+  color: yellow;
+  font-size: 20px;
+  text-shadow: -1px 0 black, 0 2px black, 2px 0 black, 0 -1px black;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  margin: 20px; 
+  height: 50px;
+  width: 170px;
+  border: 3px solid white;
+  background-color: red;
+  border-radius: 5%;
+}
+
+.level-2-tag.hidden {
+  display: none;
+}
+
 .lives {
   display: flex;
   padding: 15px;
@@ -119,6 +140,9 @@ body {
   border-radius: 5%;
   cursor:pointer;
 }
+.button-start:focus {
+  outline-color: yellow;
+}
 .button-start:hover {
   height: 75px;
   width: 145px;
@@ -137,7 +161,7 @@ body {
   position: absolute;
   height: 750px;
   width:950px;
-  background-image: url('https://i.pinimg.com/originals/6b/bc/d9/6bbcd95e1f751a22c7bfa6928823e4ee.jpg');
+  background-image: url('./assets/Title-Card.jpg');
   background-size: cover;
   z-index: 1;
   border-radius: 5%;
@@ -159,14 +183,14 @@ body {
 .heart {
   display: flex;
   margin-left: 30px;
-  background-image: url('https://www.pngjoy.com/pngl/272/5209352_pixel-hearts-broken-heart-pixel-png-png-download.png');
+  background-image: url('./assets/heart.png');
   background-size: cover;
   height: 50px;
   width: 55px;
 }
 .heart.broken {
   display: flex;
-  background-image: url('https://www.nicepng.com/png/full/294-2948619_red-pixelated-broken-heart-redheart-brokenheart-freetoe-pixel.png');
+  background-image: url('./assets/Broken-Heart.png');
   background-size: contain;
   background-repeat: no-repeat;
   height: 50px;
@@ -183,7 +207,7 @@ body {
   position: absolute;
   height: 700px;
   width: 950px;
-  background-image: url('https://31.media.tumblr.com/tumblr_m9w94lgKjF1r8rjf0o1_500.gif');
+  background-image: url('./assets/Game-Over-Card.gif');
   background-size: cover;
   background-repeat: no-repeat;
   z-index: 1;
@@ -260,8 +284,9 @@ body {
   padding: 10px;
   font-size: 15px;
   border: 3px solid white;
+  border-radius: 5%;
   height: 300px;
-  width: 240px;
+  width: 350px;
   text-align: center;
 }
 
@@ -270,4 +295,12 @@ body {
   align-items: center;
   height: 90px;
   width: 160px;
+}
+
+h2 {
+  margin: 2px;
+}
+li {
+  line-height: 30px;
+  font-size: 20px;
 }

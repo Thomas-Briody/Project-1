@@ -4,9 +4,13 @@ const titleCard = document.querySelector('.title-card')
 const gameOverCard = document.querySelector('.game-over')
 const playAgain = document.querySelector('.play-again')
 const gameOverPoints = document.querySelector('.game-over-points')
+const levelTwoTag = document.querySelector('.level-2-tag')
 const endMessage = document.querySelector('.end-message')
 const levelTwo = document.querySelector('.level-2')
 let playerScores = []
+if (localStorage) {
+  playerScores = JSON.parse(localStorage.getItem('highscores')) || []
+}
 let player
 const scoresList = document.querySelector('ol')
 const width = 15
@@ -22,7 +26,6 @@ let currentAlienPositions = [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33,
 const hearts = document.querySelectorAll('.heart')
 let aliensMovingInterval
 let bombDropInterval
-let scoreCheck
 const pointsTotal = document.querySelector('.points-total')
 const dangerZone = [
   { letter: '-', index: 195 },
@@ -93,6 +96,7 @@ startButton.addEventListener('click', () => {
 function orderAndDisplayScores() {
   const array = playerScores
     .sort((playerA, playerB) => playerB.score - playerA.score)
+    .slice(0, 5)
     .map(player => {
       console.log('PLAYER', player)
       return `<li>
@@ -110,7 +114,7 @@ playAgain.addEventListener('click', () => {
   gameOverCheck = false
   gameOverCard.classList.add('hidden')
   hearts.forEach((heart) => {
-    heart.classList.remove('broken')
+    heart.classList.remove('broken', 'animate__heartBeat')
   })
   startButton.disabled = true
   points = 0
@@ -122,6 +126,7 @@ levelTwo.addEventListener('click', () => {
   cells.forEach((cell) => {
     cell.classList.remove('laser')
   })
+  levelTwoTag.classList.remove('hidden')
   gameOverCard.classList.add('hidden')
   hearts.forEach((heart) => {
     heart.classList.remove('broken')
@@ -393,6 +398,9 @@ function createGrid() {
 }
 function gameOver(winMessage) {
   player.score = points
+  if (localStorage) {
+    localStorage.setItem('highscores', JSON.stringify(playerScores))
+  }
   orderAndDisplayScores()
   console.log(player)
   gameOverCheck = true
