@@ -6,6 +6,7 @@ const playAgain = document.querySelector('.play-again')
 const gameOverPoints = document.querySelector('.game-over-points')
 const endMessage = document.querySelector('.end-message')
 const levelTwo = document.querySelector('.level-2')
+const scoresList = document.querySelector('ol')
 const width = 15
 const cells = []
 let spaceship = 217
@@ -14,8 +15,8 @@ let laserTimer
 let reset = false
 let gameOverCheck = false
 const bombTimers = {}
-let aliensStart = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]
-let currentAlienPositions = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]
+let aliensStart = [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57]
+let currentAlienPositions = [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57]
 const hearts = document.querySelectorAll('.heart')
 let aliensMovingInterval
 let bombDropInterval
@@ -64,7 +65,7 @@ function startLevelTwo() {
   pointsTotal.innerHTML = '0'
   reset = false
   titleCard.classList.add('hidden')
-  aliensStart = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57]
+  aliensStart = [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72]
   currentAlienPositions = aliensStart
   alienSpeed = 500
   bombFrequencySpeed = 1000
@@ -167,13 +168,6 @@ function shootLaser() {
 
 function laserFly(laserTimer, laser) {
   laserTimer = setInterval(() => {
-    // if (lives === 0 || aliensReachGround() || currentAlienPositions.length === 0) {
-    //   console.log('CLEAR LASERS')
-    //   clearInterval(laserTimer)
-    //   return cells.forEach((cell) => {
-    //     cell.classList.remove('laser')
-    //   }) 
-    // } 
     if (lives === 0 || aliensReachGround() || currentAlienPositions.length === 0) {
       clearInterval(laserTimer)
       cells[laser].classList.remove('laser')
@@ -183,7 +177,6 @@ function laserFly(laserTimer, laser) {
 
     } else if (cells[laser].classList.contains('alien')) {
       clearInterval(laserTimer)
-      console.log('LASER>', laser)
       cells[laser].classList.add('explosion')
       points += 100
       pointsTotal.innerHTML = points
@@ -258,6 +251,7 @@ function moveAliensDown() {
   })
 }
 //* This interval ensures that the functions for moving the alien right occurs every 1 second. It detects if any of the aliens hit the right boundary, in which case it tells the aliens to move down 1 cell (by calling the moveAliensDown function), and calls the moveAliensLeft function 
+
 function aliensMovingRightInterval() {
   aliensMovingInterval = setInterval(() => {
     if (currentAlienPositions.length === 0) {
@@ -407,7 +401,9 @@ function collisionCheck(bombTimer) {
   setInterval(() => {
     cells.forEach((cell) => {
       if (cell.classList.contains('laser') && cell.classList.contains('bomb')) {
+        console.log('COLLISION')
         clearInterval(bombTimer)
+        console.log(bombTimer)
         cell.classList.remove('laser')
         cell.classList.remove('bomb')
         cell.classList.add('explosion')
@@ -418,8 +414,6 @@ function collisionCheck(bombTimer) {
     })
   }, 10)
 }
-collisionCheck()
-
 
 function loseLife() {
   if (lives === 0) {
@@ -428,7 +422,3 @@ function loseLife() {
   }
   hearts[lives - 1].classList.add('broken')
 }
-
-//* centering rocket in cells
-//* spacing in between words in game over screen
-//* 

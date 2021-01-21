@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Space Invaders!</title>
+  <link rel="shortcut icon" type="image/jpg" href="https://i.imgur.com/qk6fbSh.png"/>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
@@ -18,7 +19,7 @@
     <button class="button-start">Start Game</button>
     <br>
     <p class='instructions'> Instructions: <br><br>
-      Use arrows to move and space to shoot laser</p>
+      Use the left and right arrow keys to move and press space to fire the laser</p>
   </div>
 
   <div class="grid"></div>
@@ -35,6 +36,10 @@
 
   <div class="game-over animate__animated hidden">
     <p class="end-message"></p>
+    <div class="leaderboard">
+      Leaderboard:
+      <ol></ol>
+    </div>
     <div class="play-again">Click here to play again
     </div>
     <div class="level-2">Continue to Level 2</div>
