@@ -16,10 +16,12 @@
 
 <body>
   <div class="title-card animate__animated">
+    <div class="button-div">
     <button class="button-start">Start Game</button>
+    </div>
     <br>
     <p class='instructions'> Instructions: <br><br>
-      Use the left and right arrow keys to move and press space to fire the laser</p>
+      Use the left and right arrow keys to move <br>press space to fire the laser</p>
   </div>
 
   <div class="grid"></div>
@@ -28,16 +30,17 @@
     <p class="points">Points: <span class="points-total">0</span></p>
 
     <div class="lives-container">
-      <div class="heart"></div>
-      <div class="heart"></div>
-      <div class="heart"></div>
+      <div class="heart animate__animated"></div>
+      <div class="heart animate__animated"></div>
+      <div class="heart animate__animated"></div>
     </div>
   </div>
 
   <div class="game-over animate__animated hidden">
     <p class="end-message"></p>
     <div class="leaderboard">
-      Leaderboard:
+      <h2>Leaderboard:</h2>
+      <br>
       <ol></ol>
     </div>
     <div class="play-again">Click here to play again

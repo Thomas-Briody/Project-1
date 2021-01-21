@@ -6,6 +6,8 @@ const playAgain = document.querySelector('.play-again')
 const gameOverPoints = document.querySelector('.game-over-points')
 const endMessage = document.querySelector('.end-message')
 const levelTwo = document.querySelector('.level-2')
+let playerScores = []
+let player
 const scoresList = document.querySelector('ol')
 const width = 15
 const cells = []
@@ -20,6 +22,7 @@ let currentAlienPositions = [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33,
 const hearts = document.querySelectorAll('.heart')
 let aliensMovingInterval
 let bombDropInterval
+let scoreCheck
 const pointsTotal = document.querySelector('.points-total')
 const dangerZone = [
   { letter: '-', index: 195 },
@@ -44,6 +47,7 @@ let alienSpeed = 800
 let bombFrequencySpeed = 2000
 
 function startGame() {
+  console.log('Function is running')
   lives = 3
   pointsTotal.innerHTML = '0'
   reset = false
@@ -76,10 +80,27 @@ function startLevelTwo() {
   bombDropInterval = setInterval(() => bombAppear(), bombFrequencySpeed)
 }
 
+
 startButton.addEventListener('click', () => {
+  const newName = prompt('Please enter your name')
+  player = { name: newName }
+  playerScores.push(player)
   startGame()
   startButton.disabled = true
 })
+
+
+function orderAndDisplayScores() {
+  const array = playerScores
+    .sort((playerA, playerB) => playerB.score - playerA.score)
+    .map(player => {
+      console.log('PLAYER', player)
+      return `<li>
+      ${player.name} scored ${player.score} points.
+      </li>`
+    })
+  scoresList.innerHTML = array.join('')
+}
 
 playAgain.addEventListener('click', () => {
   levelTwo.classList.remove('hidden')
@@ -371,6 +392,9 @@ function createGrid() {
   }
 }
 function gameOver(winMessage) {
+  player.score = points
+  orderAndDisplayScores()
+  console.log(player)
   gameOverCheck = true
   if (winMessage === 'Game Over!') {
     levelTwo.classList.add('hidden')
@@ -417,8 +441,10 @@ function collisionCheck(bombTimer) {
 
 function loseLife() {
   if (lives === 0) {
+    hearts.forEach((heart) => {
+      heart.classList.add('broken', 'animate__heartBeat')
+    })
     return gameOver('Game Over!')
-
   }
-  hearts[lives - 1].classList.add('broken')
+  hearts[lives - 1].classList.add('broken', 'animate__heartBeat')
 }
