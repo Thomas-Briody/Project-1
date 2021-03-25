@@ -1,4 +1,4 @@
-# Project-1 - Space Invaders
+# Project-1 - Space Invaders <img src='https://i.imgur.com/qk6fbSh.png' width="60"/>
 
 **Overview**
 
@@ -10,11 +10,9 @@ The Brief for this project was to create a grid-based game utilising vanilla Jav
 * **Render a game in the browser**
 * **Design logic for winning** & **visually display which player won**
 * **Include separate HTML / CSS / JavaScript files**
-* Stick with **KISS (Keep It Simple Stupid)** and **DRY (Don't Repeat Yourself)** principles
 * Use **Javascript** for **DOM manipulation**
-* **Deploy your game online**, where the rest of the world can access it
-* Use **semantic markup** for HTML and CSS (adhere to best practices)
-* A **working game**, hosted on the internet
-
+* **Deploy the game online**
+* Use **semantic markup** for HTML and CSS
 
 -----
+**Approach*
