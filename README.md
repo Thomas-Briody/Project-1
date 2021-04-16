@@ -189,5 +189,5 @@ Below you can see the game over screens depending on if the player did or did no
 * The addition of stretch goals such as a scoreboard and a level two allowed me to challenge myself further throughout the project
 
 
-<img src='https://i.imgur.com/xkLmfzL.png' width="650"/>
+<img src='https://i.imgur.com/RKhuUeP.png' width="650"/>
 
